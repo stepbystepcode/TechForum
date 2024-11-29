@@ -1,10 +1,23 @@
 'use server'
-import { SignupFormSchema, FormState } from '@/lib/definitions'
+import { SignupFormSchema } from '@/lib/definitions'
 import bcrypt from 'bcryptjs'
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
-export async function signup(state: FormState, formData: FormData) {
+
+export type AuthResult = {
+  errors?: {
+    username?: string[];
+    password?: string[];
+  };
+  message?: string;
+}
+
+// 修改为直接返回 Promise<AuthResult>
+export async function signup(prevState: AuthResult): Promise<AuthResult> {
+  // 获取表单数据
+  const formData = await (arguments[1] as FormData);
+  
   const validatedFields = SignupFormSchema.safeParse({
     username: formData.get('username'),
     password: formData.get('password'),
@@ -25,32 +38,44 @@ export async function signup(state: FormState, formData: FormData) {
     },
   })
  
- 
   if (!user) {
     return {
       message: 'An error occurred while creating your account.',
     }
   }
-
-}
-export async function login(state: FormState, formData: FormData) {
-    const username = formData.get('username') as string | null;
-    const password = formData.get('password') as string | null;
   
-    if (!username || !password) {
-      return {
-          message: 'Username and password are required.',
+  return {
+    message: 'Account created successfully!'
+  }
+}
+
+export async function login(prevState: AuthResult): Promise<AuthResult> {
+  // 获取表单数据
+  const formData = await (arguments[1] as FormData);
+  
+  const username = formData.get('username') as string | null;
+  const password = formData.get('password') as string | null;
+
+  if (!username || !password) {
+    return {
+      errors: {
+        username: !username ? ['Username is required'] : undefined,
+        password: !password ? ['Password is required'] : undefined,
       }
     }
-  
-    const user = await prisma.user.findUnique({
-      where: { username }, // username is now guaranteed to be a string
-    })
-  
-    if (!user || !await bcrypt.compare(password, user.password)) {
-      return {
-          message: 'Invalid username or password.',
-        }
-    }
+  }
 
+  const user = await prisma.user.findUnique({
+    where: { username },
+  })
+
+  if (!user || !await bcrypt.compare(password, user.password)) {
+    return {
+      message: 'Invalid username or password.',
+    }
+  }
+
+  return {
+    message: 'Login successful!'
+  }
 }
