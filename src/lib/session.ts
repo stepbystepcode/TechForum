@@ -1,3 +1,4 @@
+'use server'
 import 'server-only'
 import { SignJWT, jwtVerify } from 'jose'
 import { SessionPayload } from '@/lib/definitions'
@@ -39,6 +40,8 @@ export async function createSession(userId: string) {
             path: '/',
         }
     )
+    
+
 }
 
 export async function updateSession() {

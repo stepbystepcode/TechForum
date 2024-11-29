@@ -2,6 +2,7 @@
 import { SignupFormSchema } from '@/lib/definitions'
 import bcrypt from 'bcryptjs'
 import { PrismaClient } from '@prisma/client'
+import { createSession } from '@/lib/session'
 
 const prisma = new PrismaClient()
 
@@ -74,7 +75,7 @@ export async function login(prevState: AuthResult): Promise<AuthResult> {
       message: 'Invalid username or password.',
     }
   }
-
+  await createSession(user.id)
   return {
     message: 'Login successful!'
   }
