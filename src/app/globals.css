@@ -1,21 +1,71 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+ 
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 210 40% 96.1%;
+    --foreground: 210 40% 20%;
+ 
+    --card: 0 0% 100%;
+    --card-foreground: 210 40% 20%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 40% 20%;
+ 
+    --primary: 210 100% 50%;
+    --primary-foreground: 210 10% 98%;
+ 
+    --secondary: 210 30% 90%;
+    --secondary-foreground: 210 40% 20%;
+ 
+    --muted: 210 30% 90%;
+    --muted-foreground: 210 30% 40%;
+ 
+    --accent: 210 30% 90%;
+    --accent-foreground: 210 40% 20%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 10% 98%;
+
+    --border: 210 30% 80%;
+    --input: 210 30% 80%;
+    --ring: 210 100% 50%;
+ 
+    --radius: 0.5rem;
+  }
+}
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+.glass-effect {
+  @apply bg-white bg-opacity-70 backdrop-filter backdrop-blur-lg;
 }
+
+.floating-card {
+  @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+}
+
+.post-card {
+  @apply bg-white rounded-lg shadow-md overflow-hidden border border-gray-200;
+}
+
+.post-card-header {
+  @apply bg-primary/10 p-4 border-b border-gray-200;
+}
+
+.post-card-body {
+  @apply p-4;
+}
+
+.post-card-footer {
+  @apply bg-gray-50 p-4 border-t border-gray-200 flex justify-between items-center;
+}
+
