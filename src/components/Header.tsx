@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 import Link from 'next/link'
-
+import { logout } from '@/lib/session'
 export function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
@@ -18,8 +18,7 @@ export function Header() {
   }, [])
 
   const handleLogout = () => {
-    // 清除 cookie 或者调用后端登出接口
-    document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;"
+    logout()
     setIsLoggedIn(false)
   }
 
